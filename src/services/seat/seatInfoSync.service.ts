@@ -4,6 +4,7 @@
 import * as debug from 'debug';
 import * as httpStatus from 'http-status';
 import * as soap from 'soap';
+import { createSoapClientAsync } from '../../util/client';
 import { ResultStatus } from '../../util/enums';
 import { IResultInfo } from '../../util/interface';
 import { MvtkReserveServiceError } from '../../util/mvtkReseveError';
@@ -388,16 +389,7 @@ export async function seatInfoSync(args: ISeatInfoSyncIn, options?: soap.IOption
     // log('input', JSON.stringify(input));
     const method = 'SeatInfoSyncAsync';
     const url = `${(<string>process.env.MVTK_RESERVE_ENDPOINT)}${WSDL}`;
-    const createClientAsync = async () => {
-        return new Promise<soap.Client>((resolve, reject) => {
-            soap.createClientAsync(url, options).then((soapClient) => {
-                resolve(soapClient);
-            }).catch((err) => {
-                reject(err);
-            });
-        });
-    };
-    const client = await createClientAsync();
+    const client = await createSoapClientAsync(url, options);
     // log('describe', JSON.stringify(client.describe())); // 定義確認
     const result = await (<Function>client[method])(input);
     if (result.SeatInfoSyncResult.RESULT_INFO.STATUS !== ResultStatus.Success) {
