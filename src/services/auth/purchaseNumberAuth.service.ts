@@ -1,12 +1,84 @@
+/**
+ * 購入管理番号認証
+ */
 import * as debug from 'debug';
 import * as httpStatus from 'http-status';
 import * as soap from 'soap';
+import { createSoapClientAsync } from '../../util/client';
 import { ResultStatus } from '../../util/enums';
 import { IResultInfo } from '../../util/interface';
 import { MvtkReserveServiceError } from '../../util/mvtkReseveError';
 
 const log = debug('mvtk-reserve-service:auth:purchaseNumberAuth');
 const WSDL = '/Auth/PurchaseNumberAuthSvc.svc?singleWsdl';
+
+/**
+ * 情報種別コード
+ */
+export enum InformationTypeCode {
+    /**
+     * 有効券の情報のみ
+     */
+    Valid = '1',
+    /**
+     * 無効券の情報のみ
+     */
+    Invalid = '2',
+    /**
+     * 有効券・無効券の情報両方
+     */
+    All = '3'
+}
+
+/**
+ * 購入管理番号無効事由
+ */
+export enum PurchaseInvalidityReason {
+    /**
+     * 存在無
+     */
+    NoExistence = '01',
+    /**
+     * Pinｺｰﾄﾞ必須
+     */
+    PinCodeRequired = '02',
+    /**
+     * Pinｺｰﾄﾞ認証ｴﾗ-
+     */
+    PinCodeError = '03',
+    /**
+     * 作品不一致
+     */
+    FilmDiscrepancy = '04',
+    /**
+     * 未ｱｸﾃｨﾍﾞｰﾄ
+     */
+    Unactivated = '05',
+    /**
+     * 選択興行対象外
+     */
+    NotEligibleForSelection = '06',
+    /**
+     * 有効期限切れ
+     */
+    Expired = '07',
+    /**
+     * 座席予約期間外
+     */
+    OutsideSeatingReservationPeriod = '08',
+    /**
+     * その他
+     */
+    Other = '09',
+    /**
+     * 座席予約開始前
+     */
+    BeforeTheSeatReservationStarts = '11',
+    /**
+     * 仮お直り購入番号数不一致
+     */
+    TemporaryRedemptionNumberPurchaseNumberMismatch = '12'
+}
 
 /**
  * 購入管理番号情報
@@ -164,11 +236,11 @@ export interface IPurchaseNumberInfo {
     /**
      * 有効券情報リスト
      */
-    ykknInfo: IValidTicket[];
+    ykknInfo: IValidTicket[] | null;
     /**
      * 無効券情報リスト
      */
-    mkknInfo: INvalidTicket[];
+    mkknInfo: INvalidTicket[] | null;
 }
 
 /**
@@ -186,7 +258,7 @@ export interface IPurchaseNumberAuthResult extends IResultInfo {
     /**
      * 購入管理番号情報
      */
-    knyknrNoInfoOut: IPurchaseNumberInfo[];
+    knyknrNoInfoOut: IPurchaseNumberInfo[] | null;
 }
 
 /**
@@ -219,9 +291,10 @@ export async function purchaseNumberAuth(args: IPurchaseNumberAuthIn, options?: 
         stCd: args.stCd,
         jeiYmd: args.jeiYmd
     };
+
     const method = 'PurchaseNumberAuthAsync';
     const url = `${(<string>process.env.MVTK_RESERVE_ENDPOINT)}${WSDL}`;
-    const client = await soap.createClientAsync(url, options);
+    const client = await createSoapClientAsync(url, options);
     // log('describe', JSON.stringify(client.describe())); // 定義確認
     const result = await (<Function>client[method])(input);
     if (result.PurchaseNumberAuthResult.RESULT_INFO.STATUS !== ResultStatus.Success) {
@@ -237,76 +310,47 @@ export async function purchaseNumberAuth(args: IPurchaseNumberAuthIn, options?: 
             status: result.PurchaseNumberAuthResult.RESULT_INFO.STATUS,
             message: result.PurchaseNumberAuthResult.RESULT_INFO.MESSAGE
         },
-        ykknmiNumSum: result.PurchaseNumberAuthResult.YKKNMI_NUM_SUM,
-        mkknmiNumSum: result.PurchaseNumberAuthResult.MKKNMI_NUM_SUM,
-        knyknrNoInfoOut: result.PurchaseNumberAuthResult.KNYKNR_NO_INFO_OUT.KnyknrNoInfoOut
+        ykknmiNumSum: Number(result.PurchaseNumberAuthResult.YKKNMI_NUM_SUM),
+        mkknmiNumSum: Number(result.PurchaseNumberAuthResult.MKKNMI_NUM_SUM),
+        knyknrNoInfoOut: (result.PurchaseNumberAuthResult.KNYKNR_NO_INFO_OUT === null)
+            ? null
+            : result.PurchaseNumberAuthResult.KNYKNR_NO_INFO_OUT.KnyknrNoInfoOut.map((knyknrNoInfo: any) => {
+                return {
+                    knyknrNo: knyknrNoInfo.KNYKNR_NO,
+                    knyknrNoMkujyuCd: knyknrNoInfo.KNYKNR_NO_MKUJYU_CD,
+                    kgygftknknyYmd: knyknrNoInfo.KGYGFTKNKNY_YMD,
+                    kgygftknykTm: knyknrNoInfo.KGYGFTKNYK_TM,
+                    dnshKmTyp: knyknrNoInfo.DNSH_KM_TYP,
+                    znkkkytsknGkjknTyp: knyknrNoInfo.ZNKKKYTSKN_GKJKN_TYP,
+                    ykknmiNum: knyknrNoInfo.YKKNMI_NUM,
+                    mkknmiNum: knyknrNoInfo.MKKNMI_NUM,
+                    ykknInfo: (knyknrNoInfo.YKKN_INFO === null)
+                        ? null
+                        : knyknrNoInfo.YKKN_INFO.YkknInfo.map((ykknInfo: any) => {
+                            return {
+                                eishhshkTyp: ykknInfo.EISHHSHK_TYP,
+                                kijUnip: ykknInfo.KIJ_UNIP,
+                                knshknhmbiUnip: ykknInfo.KNSHKNHMBI_UNIP,
+                                ykknshTyp: ykknInfo.YKKNSH_TYP,
+                                ykknKnshbtsmiNum: ykknInfo.YKKN_KNSHBTSMI_NUM
+                            };
+                        }),
+                    mkknInfo: (knyknrNoInfo.MKKN_INFO === null)
+                        ? null
+                        : knyknrNoInfo.MKKN_INFO.MkknInfo.map((mkknInfo: any) => {
+                            return {
+                                mkknshTyp: mkknInfo.MKKNSH_TYP,
+                                mkknKnshbtsmiNum: mkknInfo.MKKN_KNSHBTSMI_NUM,
+                                mkjyTyp: mkknInfo.MKJY_TYP,
+                                yykDt: mkknInfo.YYK_DT,
+                                shyJeiDt: mkknInfo.SHY_JEI_DT,
+                                shyStCd: mkknInfo.SHY_ST_CD,
+                                shyScrnCd: mkknInfo.SHY_SCRN_CD,
+                                shySkhnCd: mkknInfo.SHY_SKHN_CD,
+                                shySkhnNm: mkknInfo.SHY_SKHN_NM
+                            };
+                        })
+                };
+            })
     };
-}
-
-/**
- * 情報種別コード
- */
-export enum InformationTypeCode {
-    /**
-     * 有効券の情報のみ
-     */
-    Valid = '1',
-    /**
-     * 無効券の情報のみ
-     */
-    Invalid = '2',
-    /**
-     * 有効券・無効券の情報両方
-     */
-    All = '3'
-}
-
-/**
- * 購入管理番号無効事由
- */
-export enum PurchaseInvalidityReason {
-    /**
-     * 存在無
-     */
-    NoExistence = '01',
-    /**
-     * Pinｺｰﾄﾞ必須
-     */
-    PinCodeRequired = '02',
-    /**
-     * Pinｺｰﾄﾞ認証ｴﾗ-
-     */
-    PinCodeError = '03',
-    /**
-     * 作品不一致
-     */
-    FilmDiscrepancy = '04',
-    /**
-     * 未ｱｸﾃｨﾍﾞｰﾄ
-     */
-    Unactivated = '05',
-    /**
-     * 選択興行対象外
-     */
-    NotEligibleForSelection = '06',
-    /**
-     * 有効期限切れ
-     */
-    Expired = '07',
-    /**
-     * 座席予約期間外
-     */
-    OutsideSeatingReservationPeriod = '08',
-    /**
-     * その他
-     */
-    Other = '09',
-    /**
-     * 座席予約開始前
-     */
-    BeforeTheSeatReservationStarts = '11',
-    /**
-     * 仮お直り購入番号数不一致
-     */
-    TemporaryRedemptionNumberPurchaseNumberMismatch = '12'
 }

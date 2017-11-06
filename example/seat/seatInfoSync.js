@@ -26,12 +26,7 @@ seatInfoSyncService.seatInfoSync({
         }
     ],
     zskInfo: [
-        {
-            zskCd: 'Ａ－２' //座席コード
-        },
-        {
-            zskCd: 'Ａ－３' //座席コード
-        }
+        { zskCd: 'Ａ－２' }, { zskCd: 'Ａ－３' }
     ],
     skhnCd: '1622700' //作品コード
 }).then((result) => {

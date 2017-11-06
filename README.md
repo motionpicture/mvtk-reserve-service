@@ -22,7 +22,7 @@ npm install @motionpicture/mvtk-reserve-service
 ```
 
 ```js
-const COA = require('@motionpicture/mvtk-reserve-service');
+const mvtkReserve = require('@motionpicture/mvtk-reserve-service');
 ```
 
 ### 以下環境変数の設定が必須です。
