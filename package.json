@@ -17,9 +17,9 @@
     "http-status": "^1.0.1",
     "soap": "^0.23.0"
   },
-  "description": "COA client library for Node.js",
+  "description": "MvtkReserve client library for Node.js",
   "devDependencies": {
-    "@types/bluebird": "^3.5.17",
+    "@types/bluebird": "^3.5.18",
     "@types/debug": "0.0.30",
     "@types/http-status": "^0.2.30",
     "@types/mocha": "^2.2.43",
@@ -31,14 +31,14 @@
     "jsdoc": "^3.5.5",
     "mocha": "^3.5.3",
     "nsp": "^2.8.1",
-    "nyc": "^11.2.1",
+    "nyc": "^11.3.0",
     "rimraf": "^2.6.2",
     "sinon": "^3.3.0",
-    "snyk": "^1.41.1",
+    "snyk": "^1.47.0",
     "ts-node": "^3.3.0",
     "tslint": "^5.7.0",
     "tslint-microsoft-contrib": "^5.0.1",
-    "typescript": "^2.5.3"
+    "typescript": "^2.6.1"
   },
   "engines": {
     "node": ">=6.9.1",
