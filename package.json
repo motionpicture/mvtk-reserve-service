@@ -61,7 +61,8 @@
   },
   "name": "@motionpicture/mvtk-reserve-service",
   "repository": {
-    "type": "git"
+    "type": "git",
+    "url": "https://github.com/motionpicture/mvtk-reserve-service"
   },
   "scripts": {
     "build": "tsc",
@@ -72,11 +73,11 @@
     "coverage": "nyc mocha src/**/*.spec.ts",
     "snyk": "snyk wizard",
     "test": "npm run check && npm run coverage",
-    "tslint": "tslint --type-check --project tsconfig.json -c tslint.json --exclude \"**/*.spec.ts\" src/**/*.ts",
+    "tslint": "tslint --project tsconfig.json -c tslint.json --exclude \"**/*.spec.ts\" src/**/*.ts",
     "preversion": "npm run clean && npm run build && npm test",
     "version": "git add -A",
     "postversion": "git push origin --tags",
     "prepublishOnly": "npm run clean && npm run build && npm test && npm run doc"
   },
-  "version": "1.0.0"
+  "version": "1.1.0"
 }

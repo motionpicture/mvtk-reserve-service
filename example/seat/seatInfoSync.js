@@ -20,7 +20,7 @@ seatInfoSyncService.seatInfoSync({
             knshInfo: [
                 {
                     knshTyp: '01', //券種区分
-                    miNum: '2' //枚数
+                    miNum: 2 //枚数
                 }
             ]
         }

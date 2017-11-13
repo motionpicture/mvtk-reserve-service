@@ -160,7 +160,7 @@ export interface IKnyknrNoInfo {
         /**
          * 枚数
          */
-        miNum: string;
+        miNum: number;
     }[];
 }
 
@@ -356,7 +356,7 @@ export async function seatInfoSync(args: ISeatInfoSyncIn, options?: soap.IOption
                         KnshInfo: knyknrNoInfo.knshInfo.map((knshInfo) => {
                             return {
                                 KNSH_TYP: knshInfo.knshTyp,
-                                MI_NUM: knshInfo.miNum,
+                                MI_NUM: String(knshInfo.miNum),
                                 targetNSAlias: 'tns',
                                 targetNamespace: namespace
                             };

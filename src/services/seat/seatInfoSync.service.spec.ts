@@ -46,7 +46,7 @@ describe('座席指定情報連携', () => {
                     knshInfo: [
                         {
                             knshTyp: '01', //券種区分
-                            miNum: '2' //枚数
+                            miNum: 2 //枚数
                         }
                     ]
                 }
@@ -97,7 +97,7 @@ describe('座席指定情報連携', () => {
                     knshInfo: [
                         {
                             knshTyp: '01', //券種区分
-                            miNum: '2' //枚数
+                            miNum: 2 //枚数
                         }
                     ]
                 }
@@ -151,7 +151,7 @@ describe('座席指定情報連携', () => {
                     knshInfo: [
                         {
                             knshTyp: '01', //券種区分
-                            miNum: '2' //枚数
+                            miNum: 2 //枚数
                         }
                     ]
                 }
@@ -192,7 +192,7 @@ describe('座席指定情報連携', () => {
                     knshInfo: [
                         {
                             knshTyp: '01', //券種区分
-                            miNum: '2' //枚数
+                            miNum: 2 //枚数
                         }
                     ]
                 }

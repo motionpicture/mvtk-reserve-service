@@ -5,6 +5,7 @@
 
 import * as purchaseNumberAuthService from './services/auth/purchaseNumberAuth.service';
 import * as seatInfoSyncService from './services/seat/seatInfoSync.service';
+import * as utilConstants from './util/constants';
 import * as utilEnums from './util/enums';
 
 /**
@@ -26,4 +27,5 @@ export namespace services {
  */
 export namespace util {
     export import enums = utilEnums;
+    export import constants = utilConstants;
 }

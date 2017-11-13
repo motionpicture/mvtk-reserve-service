@@ -15,3 +15,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 
 ### Security
+
+## 1.1.0 - 2017-11-13
+### Added
+ - 券種区分追加
+
+### Changed
+ - 座席指定情報連携In型変更
+
+ ## 1.0.0 - 2017-11-06
+### Added
+ - ファーストリリース
