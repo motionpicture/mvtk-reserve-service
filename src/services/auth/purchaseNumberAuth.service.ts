@@ -3,10 +3,9 @@
  */
 import * as debug from 'debug';
 import * as httpStatus from 'http-status';
-import * as soap from 'soap';
 import { createSoapClientAsync } from '../../util/client';
 import { ResultStatus } from '../../util/enums';
-import { IResultInfo } from '../../util/interface';
+import { IOption, IResultInfo } from '../../util/interface';
 import { MvtkReserveServiceError } from '../../util/mvtkReseveError';
 
 const log = debug('mvtk-reserve-service:auth:purchaseNumberAuth');
@@ -266,7 +265,7 @@ export interface IPurchaseNumberAuthResult extends IResultInfo {
  * @function purchaseNumberAuth
  *
  */
-export async function purchaseNumberAuth(args: IPurchaseNumberAuthIn, options?: soap.IOptions): Promise<IPurchaseNumberAuthResult> {
+export async function purchaseNumberAuth(args: IPurchaseNumberAuthIn, options?: IOption): Promise<IPurchaseNumberAuthResult> {
     log('purchaseNumberAuth');
     // tslint:disable-next-line:no-http-string max-line-length
     const namespace = 'http://schemas.datacontract.org/2004/07/MTBS.WCFModel.Auth.PurchaseNumberAuthSvc.PurchaseNumberAuthModel';
@@ -294,9 +293,9 @@ export async function purchaseNumberAuth(args: IPurchaseNumberAuthIn, options?: 
 
     const method = 'PurchaseNumberAuthAsync';
     const url = `${(<string>process.env.MVTK_RESERVE_ENDPOINT)}${WSDL}`;
-    const client = await createSoapClientAsync(url, options);
+    const client = await createSoapClientAsync(url);
     // log('describe', JSON.stringify(client.describe())); // 定義確認
-    const result = await (<Function>client[method])(input);
+    const result = await (<Function>client[method])(input, options);
     if (result.PurchaseNumberAuthResult.RESULT_INFO.STATUS !== ResultStatus.Success) {
         throw new MvtkReserveServiceError(
             httpStatus.BAD_REQUEST,

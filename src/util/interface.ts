@@ -8,3 +8,11 @@ export interface IResultInfo {
         message: string
     };
 }
+
+/**
+ * methodオプション
+ * @interface IOption
+ */
+export interface IOption {
+    timeout: number;
+}
