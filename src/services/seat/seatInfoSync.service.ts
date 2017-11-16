@@ -3,10 +3,9 @@
  */
 import * as debug from 'debug';
 import * as httpStatus from 'http-status';
-import * as soap from 'soap';
 import { createSoapClientAsync } from '../../util/client';
 import { ResultStatus } from '../../util/enums';
-import { IResultInfo } from '../../util/interface';
+import { IOption, IResultInfo } from '../../util/interface';
 import { MvtkReserveServiceError } from '../../util/mvtkReseveError';
 
 const log = debug('mvtk-reserve-service:seat:seatInfoSync');
@@ -334,7 +333,7 @@ export interface ISeatInfoSyncResult extends IResultInfo {
  * @function seatInfoSync
  *
  */
-export async function seatInfoSync(args: ISeatInfoSyncIn, options?: soap.IOptions): Promise<ISeatInfoSyncResult> {
+export async function seatInfoSync(args: ISeatInfoSyncIn, options?: IOption): Promise<ISeatInfoSyncResult> {
     log('seatInfoSync');
     // tslint:disable-next-line:no-http-string max-line-length
     const namespace = 'http://schemas.datacontract.org/2004/07/MTBS.WCFModel.Seat.SeatInfoSyncSvc.SeatInfoSyncModel';
@@ -389,9 +388,9 @@ export async function seatInfoSync(args: ISeatInfoSyncIn, options?: soap.IOption
     // log('input', JSON.stringify(input));
     const method = 'SeatInfoSyncAsync';
     const url = `${(<string>process.env.MVTK_RESERVE_ENDPOINT)}${WSDL}`;
-    const client = await createSoapClientAsync(url, options);
+    const client = await createSoapClientAsync(url);
     // log('describe', JSON.stringify(client.describe())); // 定義確認
-    const result = await (<Function>client[method])(input);
+    const result = await (<Function>client[method])(input, options);
     if (result.SeatInfoSyncResult.RESULT_INFO.STATUS !== ResultStatus.Success) {
         throw new MvtkReserveServiceError(
             httpStatus.BAD_REQUEST,
