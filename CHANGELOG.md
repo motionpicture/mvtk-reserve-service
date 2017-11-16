@@ -16,6 +16,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Security
 
+## 1.2.0 - 2017-11-16
+### Added
+ - タイムアウト設定追加
+
 ## 1.1.0 - 2017-11-13
 ### Added
  - 券種区分追加
