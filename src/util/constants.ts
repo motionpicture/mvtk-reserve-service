@@ -2,12 +2,12 @@
  * 券種区分
  */
 export const TICKET_TYPE = [
-    { code: '01', name: '一般2D' },
-    { code: '02', name: '小人2D' },
+    { code: '01', name: '一般' },
+    { code: '02', name: '小人' },
     { code: '03', name: '一般3D' },
     { code: '04', name: '小人3D' },
-    { code: '05', name: '一般IMAX2D' },
-    { code: '06', name: '小人IMAX2D' },
+    { code: '05', name: '一般IMAX' },
+    { code: '06', name: '小人IMAX' },
     { code: '07', name: '一般IMAX3D' },
     { code: '08', name: '小人IMAX3D' },
     { code: '09', name: '親子ペア一般' },
@@ -23,5 +23,19 @@ export const TICKET_TYPE = [
     { code: '19', name: '一般法人' },
     { code: '20', name: '一般（3250）' },
     { code: '21', name: '一般【C】' },
-    { code: 'BG', name: '一般特別上映' }
+    { code: '22', name: '一般4DX' },
+    { code: '23', name: '一般4DX3D' },
+    { code: '24', name: '一般-3Dサウンド' },
+    { code: '25', name: '一般-3Dサウンド3D' },
+    { code: '26', name: '一般アメイジングサウンド' },
+    { code: '27', name: '一般アメイジングサウンド3D' },
+    { code: '28', name: '小人4DX' },
+    { code: '29', name: '小人4DX3D' },
+    { code: 'BG', name: '一般特別上映' },
+    { code: 'BH', name: '一般【共通券】' },
+    { code: 'G1', name: '2018東宝17番組共通前売券一般' },
+    { code: 'G2', name: '2018東宝17番組共通前売券3D一般' },
+    { code: '50', name: '小人【B】' },
+    { code: 'G3', name: '2019東宝18番組共通前売券一般' },
+    { code: 'G4', name: '2019東宝18番組共通前売券一般3D' }
 ];
