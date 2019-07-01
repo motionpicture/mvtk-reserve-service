@@ -31,6 +31,8 @@ export const TICKET_TYPE = [
     { code: '27', name: '一般アメイジングサウンド3D' },
     { code: '28', name: '小人4DX' },
     { code: '29', name: '小人4DX3D' },
+    { code: '51', name: 'ムビチケ当日一般' },
+    { code: '52', name: 'ムビチケ当日小人' },
     { code: 'BG', name: '一般特別上映' },
     { code: 'BH', name: '一般【共通券】' },
     { code: 'G1', name: '2018東宝17番組共通前売券一般' },

@@ -18,6 +18,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Security
 
+## 1.3.0 - 2019-07-01
+
+### Added
+
+- ムビチケ券種区分(51,52)を追加
+
 ## 1.2.1 - 2019-04-05
 
 ### Added
