@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 
+- ムビチケ券種区分(51,52)を追加
+
 ### Changed
 
 ### Deprecated
