@@ -386,11 +386,15 @@ export async function seatInfoSync(args: ISeatInfoSyncIn, options?: IOption): Pr
         skhnCd: args.skhnCd
     };
     // log('input', JSON.stringify(input));
+    const endpoint = (options === undefined || options.endpoint === undefined)
+        ? (<string>process.env.MVTK_RESERVE_ENDPOINT) : options.endpoint;
+    const methodOption = (options === undefined || options.timeout === undefined)
+        ? undefined : { timeout: options.timeout };
     const method = 'SeatInfoSyncAsync';
-    const url = `${(<string>process.env.MVTK_RESERVE_ENDPOINT)}${WSDL}`;
+    const url = `${endpoint}${WSDL}`;
     const client = await createSoapClientAsync(url);
     // log('describe', JSON.stringify(client.describe())); // 定義確認
-    const result = await (<Function>client[method])(input, options);
+    const result = await (<Function>client[method])(input, methodOption);
     if (result.SeatInfoSyncResult.RESULT_INFO.STATUS !== ResultStatus.Success) {
         throw new MvtkReserveServiceError(
             httpStatus.BAD_REQUEST,

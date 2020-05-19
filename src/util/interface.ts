@@ -14,5 +14,6 @@ export interface IResultInfo {
  * @interface IOption
  */
 export interface IOption {
-    timeout: number;
+    timeout?: number;
+    endpoint?: string;
 }
